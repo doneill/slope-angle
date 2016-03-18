@@ -9,8 +9,6 @@
     tools:context=".SlopeAngleSensorFragment"
     tools:showIn="@layout/activity_main">
 
-
-
     <ImageView
         android:id="@+id/slopeAngleImage"
         android:layout_width="match_parent"
