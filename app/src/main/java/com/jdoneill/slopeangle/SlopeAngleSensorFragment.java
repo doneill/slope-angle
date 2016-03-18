@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -116,8 +119,10 @@ public class SlopeAngleSensorFragment extends Fragment {
                     SensorManager.getOrientation(outR, orientation);
                     // pitch angle
                     float pitch = (float)Math.toDegrees(orientation[1]);
+                    // pitch is positive no matter which way device is tilted
                     double pitchAngle = (double) Math.abs(pitch);
-
+                    // round angle to 2 decimal places
+                    pitchAngle = round(pitchAngle, 2);
                     String pitchAngleString = Double.toString(pitchAngle);
 
                     // set slope angle and color ratings
@@ -143,6 +148,22 @@ public class SlopeAngleSensorFragment extends Fragment {
 
         }
     };
+
+    /**
+     * Rounds a double to specified number of decimal places.
+     * Note the rounding mode is UP.
+     *
+     * @param value double to be rounded
+     * @param places number of decimal places to round to.
+     * @return
+     */
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
     /**
      * Unregisters the sensor listener if it is registered.
