@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.jdoneill.slope_angle"
+        applicationId "com.jdoneill.slopeangle"
         minSdkVersion 23
         targetSdkVersion 23
         versionCode 1
