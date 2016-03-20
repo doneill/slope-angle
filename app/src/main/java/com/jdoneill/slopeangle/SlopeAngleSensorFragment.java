@@ -2,6 +2,8 @@ package com.jdoneill.slopeangle;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -25,15 +27,16 @@ public class SlopeAngleSensorFragment extends Fragment {
     private static final String TAG = "SlopeAngleSensor";
 
     // Views
+    private View fragView;
+    // Layout container
     private TextView slopeAngleTV;
-    private ImageView slopeAngleImage;
-    // images
-    private int greenCircle;
-    private int blueSquare;
-    private int blackDiamond;
-    private int dblBlackDiamond;
+    private ImageView slopeArrow;
+    // drawables
+    private Bitmap arrowBitmap;
 
-
+    /**
+     * Default constructor
+     */
     public SlopeAngleSensorFragment() {
     }
 
@@ -46,16 +49,11 @@ public class SlopeAngleSensorFragment extends Fragment {
         registerEventListener(mMaxDelay, Sensor.TYPE_MAGNETIC_FIELD);
 
         // inflate fragment layout to access views
-        View fragView = inflater.inflate(R.layout.fragment_main, container, false);
+        fragView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        slopeAngleTV = (TextView)fragView.findViewById(R.id.text1);
-        slopeAngleImage = (ImageView)fragView.findViewById(R.id.slopeAngleImage);
-
-        // get resource id values to dynamically update
-        greenCircle = fragView.getResources().getIdentifier("com.jdoneill.slopeangle:mipmap/ic_green_circle", null, null);
-        blueSquare = fragView.getResources().getIdentifier("com.jdoneill.slopeangle:mipmap/ic_blue_square", null, null);
-        blackDiamond = fragView.getResources().getIdentifier("com.jdoneill.slopeangle:mipmap/ic_black_diamond", null, null);
-        dblBlackDiamond = fragView.getResources().getIdentifier("com.jdoneill.slopeangle:mipmap/ic_double_black_diamond", null, null);
+        slopeAngleTV = (TextView)fragView.findViewById(R.id.slopeText);
+        slopeArrow = (ImageView)fragView.findViewById(R.id.slopeArrow);
+        arrowBitmap = BitmapFactory.decodeResource(fragView.getResources(), R.drawable.ic_arrow_downward_black_24dp);
 
         return fragView;
     }
@@ -90,7 +88,7 @@ public class SlopeAngleSensorFragment extends Fragment {
     }
 
     /**
-     * Listener that handles step sensor events for step detector and step counter sensors.
+     * Listener that handles sensor events.
      */
     private final SensorEventListener mListener = new SensorEventListener() {
 
@@ -112,42 +110,34 @@ public class SlopeAngleSensorFragment extends Fragment {
 
                 boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
                 if(success){
+
                     float[] outR = new float[9];
                     SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR);
 
                     float orientation[] = new float[3];
                     SensorManager.getOrientation(outR, orientation);
+
                     // pitch angle
                     float pitch = (float)Math.toDegrees(orientation[1]);
                     // pitch is positive no matter which way device is tilted
                     double pitchAngle = (double) Math.abs(pitch);
                     // round angle to 2 decimal places
                     pitchAngle = round(pitchAngle, 2);
+                    // update string
                     String pitchAngleString = Double.toString(pitchAngle);
-
-                    // set slope angle and color ratings
-                    if(pitchAngle >= 56.3){
-                        slopeAngleTV.setText(pitchAngleString);
-                        slopeAngleImage.setImageResource(dblBlackDiamond);
-                    }else if(pitchAngle < 56.3 && pitchAngle > 36.9){
-                        slopeAngleTV.setText(pitchAngleString);
-                        slopeAngleImage.setImageResource(blackDiamond);
-                    }else if(pitchAngle < 36.9 && pitchAngle > 18.7){
-                        slopeAngleTV.setText(pitchAngleString);
-                        slopeAngleImage.setImageResource(blueSquare);
-                    }else if(pitchAngle < 18.7){
-                        slopeAngleTV.setText(pitchAngleString);
-                        slopeAngleImage.setImageResource(greenCircle);
-                    }
+                    slopeAngleTV.setText(pitchAngleString + (char)0x00B0);
+                    // point arrow in direction of slope angle
+                    slopeArrow.setRotation(pitch);
                 }
             }
         }
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+            // not implemented
         }
     };
+
 
     /**
      * Rounds a double to specified number of decimal places.
@@ -157,7 +147,7 @@ public class SlopeAngleSensorFragment extends Fragment {
      * @param places number of decimal places to round to.
      * @return
      */
-    public static double round(double value, int places) {
+    private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);
