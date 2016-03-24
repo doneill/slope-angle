@@ -1,4 +1,5 @@
-# slope-angle
-App in development, current screenshot below:  
+# Slope Angle
+
+App in development ... 
 
 ![Slope Angle App](slope-angle.png)
