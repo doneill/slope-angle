@@ -1,2 +1,4 @@
 # slope-angle
-Testing android sensors
+App in development, current screenshot below:  
+
+![Slope Angle App](slope-angle.png)
