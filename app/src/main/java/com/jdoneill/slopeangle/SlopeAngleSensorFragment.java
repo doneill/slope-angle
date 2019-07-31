@@ -51,8 +51,8 @@ public class SlopeAngleSensorFragment extends Fragment {
         // inflate fragment layout to access views
         fragView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        slopeAngleTV = (TextView)fragView.findViewById(R.id.slopeText);
-        slopeArrow = (ImageView)fragView.findViewById(R.id.slopeArrow);
+        slopeAngleTV = fragView.findViewById(R.id.slopeText);
+        slopeArrow = fragView.findViewById(R.id.slopeArrow);
         arrowBitmap = BitmapFactory.decodeResource(fragView.getResources(), R.drawable.ic_arrow_downward_black_24dp);
 
         return fragView;
