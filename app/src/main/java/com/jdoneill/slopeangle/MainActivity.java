@@ -19,19 +19,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Unregister Slope Angle", Snackbar.LENGTH_LONG)
-                        .setAction("Stop", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SlopeAngleSensorFragment sasFrag = (SlopeAngleSensorFragment)getFragmentManager().findFragmentById(R.id.fragment);
-                                sasFrag.unregisterListeners();
-                            }
-                        }).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Unregister Slope Angle", Snackbar.LENGTH_LONG)
+                .setAction("Stop", v -> {
+                    SlopeAngleSensorFragment sasFrag = (SlopeAngleSensorFragment)getFragmentManager().findFragmentById(R.id.fragment);
+                    sasFrag.unregisterListeners();
+                }).show());
 
     }
 
