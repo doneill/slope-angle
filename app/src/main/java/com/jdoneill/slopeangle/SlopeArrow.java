@@ -25,10 +25,10 @@ public class SlopeArrow extends View implements SensorEventListener{
     private static final String TAG = "SlopeArrowSensor";
 
     // context
-    private Context mContext;
+    private final Context mContext;
 
     // sensors
-    private SensorManager sensorManager;
+    private final SensorManager sensorManager;
     private SensorEventListener mListener;
 
     private float[] mGravity;
@@ -36,9 +36,9 @@ public class SlopeArrow extends View implements SensorEventListener{
     private float slopeAngle;
 
     // bitmap
-    private Bitmap arrowBitmap;
-    private Matrix arrowMatrix;
-    private Paint arrowPaint;
+    private final Bitmap arrowBitmap;
+    private final Matrix arrowMatrix;
+    private final Paint arrowPaint;
 
     public SlopeArrow(Context context){
         super(context);
