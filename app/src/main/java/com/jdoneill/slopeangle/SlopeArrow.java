@@ -29,8 +29,6 @@ public class SlopeArrow extends View implements SensorEventListener{
 
     // sensors
     private SensorManager sensorManager;
-    private Sensor aSensor;
-    private Sensor gSensor;
     private SensorEventListener mListener;
 
     private float[] mGravity;
@@ -54,8 +52,8 @@ public class SlopeArrow extends View implements SensorEventListener{
 
         // Get the default sensor for the sensor type from the SensorManager
         sensorManager = (SensorManager)mContext.getSystemService(Activity.SENSOR_SERVICE);
-        aSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        gSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor magSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
     }
 
