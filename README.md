@@ -1,5 +1,5 @@
 # Slope Angle
 
-App in development ... 
+Sensor testing
 
 ![Slope Angle App](slope-angle.png)
