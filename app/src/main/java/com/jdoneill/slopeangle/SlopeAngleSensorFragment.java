@@ -26,13 +26,9 @@ public class SlopeAngleSensorFragment extends Fragment {
 
     private static final String TAG = "SlopeAngleSensor";
 
-    // Views
-    private View fragView;
     // Layout container
     private TextView slopeAngleTV;
     private ImageView slopeArrow;
-    // drawables
-    private Bitmap arrowBitmap;
 
     /**
      * Default constructor
@@ -49,11 +45,14 @@ public class SlopeAngleSensorFragment extends Fragment {
         registerEventListener(mMaxDelay, Sensor.TYPE_MAGNETIC_FIELD);
 
         // inflate fragment layout to access views
-        fragView = inflater.inflate(R.layout.fragment_main, container, false);
+        // Views
+        View fragView = inflater.inflate(R.layout.fragment_main, container, false);
 
         slopeAngleTV = fragView.findViewById(R.id.slopeText);
         slopeArrow = fragView.findViewById(R.id.slopeArrow);
-        arrowBitmap = BitmapFactory.decodeResource(fragView.getResources(), R.drawable.ic_arrow_downward_black_24dp);
+        // drawables
+        Bitmap arrowBitmap = BitmapFactory.decodeResource(fragView.getResources(),
+                R.drawable.ic_arrow_downward_black_24dp);
 
         return fragView;
     }
