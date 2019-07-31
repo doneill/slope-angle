@@ -105,8 +105,8 @@ public class SlopeAngleSensorFragment extends Fragment {
                 mGeomagnetic = event.values;
 
             if(mGravity != null && mGeomagnetic != null){
-                float R[] = new float[9];
-                float I[] = new float[9];
+                float[] R = new float[9];
+                float[] I = new float[9];
 
                 boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
                 if(success){
@@ -114,7 +114,7 @@ public class SlopeAngleSensorFragment extends Fragment {
                     float[] outR = new float[9];
                     SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR);
 
-                    float orientation[] = new float[3];
+                    float[] orientation = new float[3];
                     SensorManager.getOrientation(outR, orientation);
 
                     // pitch angle
