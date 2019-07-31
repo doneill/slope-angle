@@ -25,7 +25,7 @@ public class SlopeArrow extends View implements SensorEventListener{
     private static final String TAG = "SlopeArrowSensor";
 
     // context
-    Context mContext;
+    private Context mContext;
 
     // sensors
     private SensorManager sensorManager;
@@ -33,9 +33,9 @@ public class SlopeArrow extends View implements SensorEventListener{
     private Sensor gSensor;
     private SensorEventListener mListener;
 
-    float[] mGravity;
-    float[] mGeomagnetic;
-    float slopeAngle;
+    private float[] mGravity;
+    private float[] mGeomagnetic;
+    private float slopeAngle;
 
     // bitmap
     private Bitmap arrowBitmap;
@@ -92,7 +92,7 @@ public class SlopeArrow extends View implements SensorEventListener{
      * Updates the slope angle, in degrees, such that
      * the slope arrow is drawn within view
      */
-    public void setRotationAngle(double angle){
+    private void setRotationAngle(double angle){
         // save the angle
         slopeAngle = (float)angle;
         // force the arrow to re-paint itself
@@ -107,7 +107,7 @@ public class SlopeArrow extends View implements SensorEventListener{
      * @param places number of decimal places to round to.
      * @return
      */
-    public static double round(double value, int places) {
+    private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);
