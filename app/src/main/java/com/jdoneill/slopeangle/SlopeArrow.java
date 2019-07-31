@@ -132,17 +132,17 @@ public class SlopeArrow extends View implements SensorEventListener{
             mGeomagnetic = event.values;
 
         if(mGravity != null && mGeomagnetic != null){
-            float R[] = new float[9];
-            float I[] = new float[9];
+            float[] R = new float[9];
+            float[] I = new float[9];
 
             boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
             if(success){
                 float[] outR = new float[9];
                 SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR);
 
-                float orientation[] = new float[3];
+                float[] orientation = new float[3];
                 SensorManager.getOrientation(outR, orientation);
-                float smoothOrientation[] = new float[3];
+                float[] smoothOrientation = new float[3];
                 // pitch angle
                 float pitch = (float)Math.toDegrees(smoothOrientation[1]);
                 // pitch is positive no matter which way device is tilted
