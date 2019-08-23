@@ -7,7 +7,7 @@ ext {
     versionCode = 1
     versionName = '0.0.1'
     // app dependencies
-    kotlinVersion = '1.3.50-eap-54'
+    kotlinVersion = '1.3.50'
     ankoVersion = '0.10.8'
     andXVersion = '1.0.2'
     andSupportVersion = '28.0.0'
@@ -17,5 +17,5 @@ ext {
     andXJunitVersion = '1.1.1'
     archLifecycleVersion = '2.0.0'
     // plugin versions
-    gradleVersion = '3.5.0-rc02'
+    gradleVersion = '3.5.0'
 }
