@@ -12,60 +12,50 @@ import android.view.View
 import com.jdoneill.slopeangle.R.drawable
 import java.math.BigDecimal
 import java.math.RoundingMode
+import kotlin.math.abs
 
 /**
  * The implementation of slope angle arrow. Thee mode of operation for rotating
  * the arrow is using device motion sensors.
  */
-class SlopeArrow(// context
-    private val mContext: Context
-) : View(mContext),
-    SensorEventListener {
+class SlopeArrow(private val mContext: Context) : View(mContext), SensorEventListener {
+    private lateinit var mGravity: FloatArray
+    private lateinit var mGeomagnetic: FloatArray
+    private lateinit var mListener: SensorEventListener
+
     // sensors
     private val sensorManager: SensorManager
-    private val mListener: SensorEventListener? = null
-    private var mGravity: FloatArray?
-    private var mGeomagnetic: FloatArray?
     private var slopeAngle = 0f
+
     // bitmap
-    private val arrowBitmap: Bitmap?
+    private val arrowBitmap: Bitmap
     private val arrowMatrix: Matrix
     private val arrowPaint: Paint
+
     /**
      * Draws the slope arrow at the current angle of slope
      */
     override fun onDraw(canvas: Canvas) {
         // reset the matrix to default values
-
         arrowMatrix.reset()
         // pass the current slope angle to the matrix
-
-
         arrowMatrix.postRotate(slopeAngle)
         // use the matrix to draw the bitmap
-
-
         canvas.drawBitmap(arrowBitmap, arrowMatrix, arrowPaint)
         super.onDraw(canvas)
     }
 
-    override fun onMeasure(
-        widthMeasureSpec: Int,
-        heightMeasureSpec: Int
-    ) {
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // Try for a width based on our minimum
-
         val minw = paddingLeft + paddingRight + suggestedMinimumWidth
         val w =
-            Math.max(minw, MeasureSpec.getSize(widthMeasureSpec))
+            minw.coerceAtLeast(MeasureSpec.getSize(widthMeasureSpec))
 
         // Whatever the width ends up being, ask for a height that would let the pie
         // get as big as it can
-
-
         val minh = paddingTop + paddingBottom
         val h =
-            Math.min(MeasureSpec.getSize(heightMeasureSpec), minh)
+            MeasureSpec.getSize(heightMeasureSpec).coerceAtMost(minh)
         setMeasuredDimension(w, h)
     }
 
@@ -76,7 +66,7 @@ class SlopeArrow(// context
     private fun setRotationAngle(angle: Double) {
         // save the angle
         slopeAngle = angle.toFloat()
-// force the arrow to re-paint itself
+        // force the arrow to re-paint itself
         postInvalidate()
     }
 
@@ -93,37 +83,29 @@ class SlopeArrow(// context
             event.values
         if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) mGeomagnetic =
             event.values
-        if (mGravity != null && mGeomagnetic != null) {
-            val R = FloatArray(9)
-            val I = FloatArray(9)
-            val success =
-                SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic)
-            if (success) {
-                val outR = FloatArray(9)
-                SensorManager.remapCoordinateSystem(
-                    R,
-                    SensorManager.AXIS_X,
-                    SensorManager.AXIS_Y,
-                    outR
-                )
-                val orientation = FloatArray(3)
-                SensorManager.getOrientation(outR, orientation)
-                val smoothOrientation = FloatArray(3)
-                // pitch angle
-
-
-                val pitch =
-                    Math.toDegrees(smoothOrientation[1].toDouble()).toFloat()
-                // pitch is positive no matter which way device is tilted
-
-
-                var pitchAngle = Math.abs(pitch).toDouble()
-                // round angle to 2 decimal places
-
-                pitchAngle = round(pitchAngle, 2)
-                val pitchAngleString = Double.toString(pitchAngle)
-                setRotationAngle(pitchAngle)
-            }
+        val R = FloatArray(9)
+        val I = FloatArray(9)
+        val success =
+            SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic)
+        if (success) {
+            val outR = FloatArray(9)
+            SensorManager.remapCoordinateSystem(
+                R,
+                SensorManager.AXIS_X,
+                SensorManager.AXIS_Y,
+                outR
+            )
+            val orientation = FloatArray(3)
+            SensorManager.getOrientation(outR, orientation)
+            val smoothOrientation = FloatArray(3)
+            // pitch angle
+            val pitch =
+                Math.toDegrees(smoothOrientation[1].toDouble()).toFloat()
+            // pitch is positive no matter which way device is tilted
+            var pitchAngle = abs(pitch).toDouble()
+            // round angle to 2 decimal places
+            pitchAngle = round(pitchAngle, 2)
+            setRotationAngle(pitchAngle)
         }
     }
 
@@ -144,10 +126,10 @@ class SlopeArrow(// context
          * @return
          */
         private fun round(value: Double, places: Int): Double {
-            if (places < 0) throw IllegalArgumentException()
+            require(places >= 0)
             var bd = BigDecimal(value)
             bd = bd.setScale(places, RoundingMode.HALF_UP)
-            return bd.doubleValue()
+            return bd.toDouble()
         }
     }
 
